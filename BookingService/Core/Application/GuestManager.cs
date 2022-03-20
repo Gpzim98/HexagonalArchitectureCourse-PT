@@ -2,6 +2,7 @@
 using Application.Guest.Requests;
 using Application.Ports;
 using Application.Responses;
+using Domain.Exceptions;
 using Domain.Ports;
 
 namespace Application
@@ -19,12 +20,41 @@ namespace Application
             {
                 var guest = GuestDTO.MapToEntity(request.Data);
 
-                request.Data.Id = await _guestRepository.Create(guest);
+                await guest.Save(_guestRepository);
+
+                request.Data.Id = guest.Id;
 
                 return new GuestResponse
                 {
                     Data = request.Data,
                     Success = true,
+                };
+            }
+            catch (InvalidPersonDocumentIdException e)
+            {
+                return new GuestResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.INVALID_PERSON_ID,
+                    Message = "The ID passed is not valid"
+                };
+            }
+            catch (MissingRequiredInformation e)
+            {
+                return new GuestResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.MISSING_REQUIRED_INFORMATION,
+                    Message = "Missing required information passed"
+                };
+            }
+            catch (InvalidEmailException e)
+            {
+                return new GuestResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.INVALID_EMAIL,
+                    Message = "The given email is not valid"
                 };
             }
             catch (Exception)
