@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    partial class HotelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220320183650_AddingValueObjectToGuest")]
+    partial class AddingValueObjectToGuest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,31 +146,6 @@ namespace Data.Migrations
                         });
 
                     b.Navigation("DocumentId")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.Room", b =>
-                {
-                    b.OwnsOne("Domain.ValueObjects.Price", "Price", b1 =>
-                        {
-                            b1.Property<int>("RoomId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Currency")
-                                .HasColumnType("int");
-
-                            b1.Property<decimal>("Value")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.HasKey("RoomId");
-
-                            b1.ToTable("Rooms");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RoomId");
-                        });
-
-                    b.Navigation("Price")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
