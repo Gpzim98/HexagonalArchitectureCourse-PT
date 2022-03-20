@@ -8,5 +8,7 @@ namespace Data
         public HotelDbContext(DbContextOptions<HotelDbContext> options) : base(options) { }
 
         public virtual DbSet<Entities.Guest> Guests { get; set; }
+        public virtual DbSet<Entities.Room> Rooms { get; set; }
+        public virtual DbSet<Entities.Booking> Bookings { get; set; }
     }
 }
