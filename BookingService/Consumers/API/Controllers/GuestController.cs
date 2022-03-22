@@ -63,7 +63,7 @@ namespace API.Controllers
         {
             var res = await _guestManager.GetGuest(guestId);
 
-            if (res.Success) return Created("", res.Data);
+            if (res.Success) return Ok(res.Data);
             
             return NotFound(res);
         }
