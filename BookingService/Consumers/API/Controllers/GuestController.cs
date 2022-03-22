@@ -35,7 +35,7 @@ namespace API.Controllers
 
             if (res.ErrorCode == ErrorCodes.NOT_FOUND)
             {
-                return BadRequest(res);
+                return NotFound(res);
             }
             else if (res.ErrorCode == ErrorCodes.INVALID_PERSON_ID)
             {
@@ -56,6 +56,16 @@ namespace API.Controllers
 
             _logger.LogError("Response with unknown ErrorCode Returned", res);
             return BadRequest(500);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GuestDTO>> Get(int guestId)
+        {
+            var res = await _guestManager.GetGuest(guestId);
+
+            if (res.Success) return Created("", res.Data);
+            
+            return NotFound(res);
         }
     }
 }
