@@ -4,6 +4,6 @@ namespace Application.Responses
 {
     public class GuestResponse : Response
     {
-        public GuestDTO Data;
+        public GuestDto Data;
     }
 }

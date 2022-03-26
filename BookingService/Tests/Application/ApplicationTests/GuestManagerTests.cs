@@ -22,7 +22,7 @@ namespace ApplicationTests
         [Test]
         public async Task HappyPath()
         {
-            var guestDto = new GuestDTO
+            var guestDto = new GuestDto
             {
                 Name = "Fulano",
                 Surname = "Ciclano",
@@ -59,7 +59,7 @@ namespace ApplicationTests
         [TestCase("abc")]
         public async Task Should_Return_InvalidPersonDocumentIdException_WhenDocsAreInvalid(string docNumber)
         {
-            var guestDto = new GuestDTO
+            var guestDto = new GuestDto
             {
                 Name = "Fulano",
                 Surname = "Ciclano",
@@ -97,7 +97,7 @@ namespace ApplicationTests
         [TestCase("Fulano", "surnametest", null)]
         public async Task Should_Return_MissingRequiredInformation_WhenDocsAreInvalid(string name, string surname, string email)
         {
-            var guestDto = new GuestDTO
+            var guestDto = new GuestDto
             {
                 Name = name,
                 Surname = surname,

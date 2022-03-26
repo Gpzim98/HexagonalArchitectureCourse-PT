@@ -1,4 +1,6 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Room.Exceptions;
+using Domain.Room.Ports;
+using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
@@ -26,6 +28,27 @@ namespace Domain.Entities
             // Verificar se existem Bookins abertos para esta Room
 
             get { return true; }
+        }
+
+        private void ValidateState()
+        {
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                throw new InvalidRoomDataException();
+            }
+        }
+
+        public async Task Save(IRoomRepository roomRepository)
+        {
+            this.ValidateState();
+
+            if (this.Id == 0)
+            {
+                this.Id = await roomRepository.Create(this);
+            }
+            else
+            {
+            }
         }
     }
 }
