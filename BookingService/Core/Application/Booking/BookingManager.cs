@@ -1,28 +1,98 @@
 ﻿using Application.Booking.Dtos;
 using Application.Booking.Ports;
+using Application.Responses;
+using Domain.Booking.Exceptions;
 using Domain.Booking.Ports;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Ports;
+using Domain.Room.Ports;
 
 namespace Application.Booking
 {
     public class BookingManager : IBookingManager
     {
         private readonly IBookingRepository _bookingRepository;
-        public BookingManager(IBookingRepository bookingRepository)
+        private readonly IRoomRepository    _roomRepository;
+        private readonly IGuestRepository   _guestRepository;
+        public BookingManager(IBookingRepository bookingRepository,
+            IRoomRepository roomRepository,
+            IGuestRepository guestRepository)
         { 
+            _guestRepository = guestRepository;
+            _roomRepository = roomRepository;
             _bookingRepository = bookingRepository;
         }
-        public Task<BookingDto> CreateBooking(BookingDto bookingDto)
+        public async Task<BookingResponse> CreateBooking(BookingDto bookingDto)
         {
-            var booking = BookingDto.MapToEntity(bookingDto);
+            try
+            {
+                var booking = BookingDto.MapToEntity(bookingDto);
+                booking.Guest = await _guestRepository.Get(bookingDto.GuestId);
+                booking.Room  = await _roomRepository.GetAggregate(bookingDto.RoomId);
 
-            booking.Save(_bookingRepository);
+                await booking.Save(_bookingRepository);
 
-            _bookingRepository.CreateBooking(booking)
+                bookingDto.Id = booking.Id;
+
+                return new BookingResponse
+                {
+                    Success = true,
+                    Data = bookingDto,
+                };
+            }
+            catch (PlacedAtIsARequiredInformationException)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_MISSING_REQUIRED_INFORMATION,
+                    Message = "PlacedAt is a required information"
+                };
+            }
+            catch (StartDateTimeIsRequiredException)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_MISSING_REQUIRED_INFORMATION,
+                    Message = "Start is a required information"
+                };
+            }
+            catch (RoomIsRequiredException)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_MISSING_REQUIRED_INFORMATION,
+                    Message = "Room is a required information"
+                };
+            }
+            catch (GuestIsRequiredException)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_MISSING_REQUIRED_INFORMATION,
+                    Message = "Guest is a required information"
+                };
+            }
+            catch (RoomCannotBeBookedException)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_ROOM_CANNOT_BE_BOOKED,
+                    Message = "The selected Room is not available"
+                };
+            }
+            catch (Exception)
+            {
+                return new BookingResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.BOOKING_COULD_NOT_STORE_DATA,
+                    Message = "There was an error when saving to DB"
+                };
+            }
         }
 
         public Task<BookingDto> GetBooking(int id)

@@ -17,7 +17,7 @@ namespace Data.Guest
             return guest.Id;
         }
 
-        public Task<Domain.Entities.Guest?> Get(int Id)
+        public Task<Domain.Entities.Guest> Get(int Id)
         {
             return _hotelDbContext.Guests.Where(g => g.Id == Id).FirstOrDefaultAsync();
         }

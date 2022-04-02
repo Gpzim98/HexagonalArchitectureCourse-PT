@@ -26,7 +26,8 @@ namespace Application.Booking.Dtos
                 Start = bookingDto.Start,
                 Guest = new Entities.Guest { Id = bookingDto.GuestId },
                 Room = new Entities.Room { Id = bookingDto.RoomId },
-                End = bookingDto.End
+                End = bookingDto.End,
+                PlacedAt = bookingDto.PlacedAt,
             };
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Booking.Exceptions
 {
-    internal class PlacedAtIsARequiredInformationException : Exception
+    public class PlacedAtIsARequiredInformationException : Exception
     {
     }
 }
