@@ -52,9 +52,25 @@ namespace Application.Room
             }
         }
 
-        public Task<RoomResponse> GetRoom(int roomId)
+        public async Task<RoomResponse> GetRoom(int roomId)
         {
-            throw new NotImplementedException();
+            var room = await _roomRepository.Get(roomId);
+
+            if (room == null) 
+            {
+                return new RoomResponse
+                {
+                    Success = false,
+                    ErrorCode = ErrorCodes.ROOM_NOT_FOUND,
+                    Message = "Room not found"
+                };
+            }
+
+            return new RoomResponse
+            {
+                Success = true,
+                Data = RoomDto.MapToDto(room),
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Domain.Enums;
-using Domain.Entities;
 
 namespace Application.Room.Dtos
 {
@@ -21,6 +20,18 @@ namespace Application.Room.Dtos
                 Level = dto.Level,
                 InMaintenance = dto.InMaintenance,
                 Price = new Domain.ValueObjects.Price { Currency = dto.Currency, Value = dto.Price }
+            };
+        }
+
+        public static RoomDto MapToDto(Domain.Entities.Room room)
+        {
+            return new RoomDto
+            {
+                Id = room.Id,
+                Name = room.Name,
+                Level = room.Level,
+                InMaintenance = room.InMaintenance,
+                Price = room.Price.Value
             };
         }
     }

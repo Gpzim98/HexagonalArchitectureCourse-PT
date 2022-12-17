@@ -46,14 +46,14 @@ namespace API.Controllers
             return BadRequest(500);
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<GuestDTO>> Get(int guestId)
-        //{
-        //    var res = await _guestManager.GetGuest(guestId);
+        [HttpGet]
+        public async Task<ActionResult<RoomDto>> Get(int roomId)
+        {
+            var res = await _roomManager.GetRoom(roomId);
 
-        //    if (res.Success) return Ok(res.Data);
+            if (res.Success) return Ok(res.Data);
 
-        //    return NotFound(res);
-        //}
+            return NotFound(res);
+        }
     }
 }
