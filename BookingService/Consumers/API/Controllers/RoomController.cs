@@ -26,7 +26,9 @@ namespace API.Controllers
         {
             var request = new CreateRoomRequest
             {
-                Data = room
+                Data = room,
+                // get this from logged user i.e: user.Roles
+                UserName = "fulano de tal" 
             };
 
             var res = await _roomManager.CreateRoom(request);

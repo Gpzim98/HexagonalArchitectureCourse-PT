@@ -16,6 +16,7 @@
         ROOM_INVALID_PERSON_ID = 102,
         ROOM_MISSING_REQUIRED_INFORMATION = 103,
         ROOM_INVALID_EMAIL = 104,
+        ROOM_INVALID_PERMISSION = 105,
 
         // Booking related codes 200 499
         BOOKING_NOT_FOUND = 200,

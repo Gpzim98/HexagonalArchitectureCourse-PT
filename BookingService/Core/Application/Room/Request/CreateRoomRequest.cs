@@ -5,5 +5,6 @@ namespace Application.Room.Request
     public class CreateRoomRequest
     {
         public RoomDto Data { get; set; }
+        public string UserName { get; set; }
     }
 }
