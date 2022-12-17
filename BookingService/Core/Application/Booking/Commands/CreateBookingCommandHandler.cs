@@ -1,5 +1,4 @@
 ﻿using Application.Booking.Dtos;
-using Application.Booking.Ports;
 using Application.Payment;
 using Application.Responses;
 using Domain.Booking.Exceptions;

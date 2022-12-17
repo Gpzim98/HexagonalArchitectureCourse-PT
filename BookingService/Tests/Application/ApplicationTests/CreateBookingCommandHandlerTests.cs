@@ -7,6 +7,7 @@ using Domain.Room.Ports;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -198,20 +199,24 @@ namespace ApplicationTests
                 Level = 1,
             };
 
+            var roomRepository = new Mock<IRoomRepository>();
+            roomRepository.Setup(x => x.GetAggregate(command.BookingDto.RoomId))
+                .Returns(Task.FromResult(fakeRoom));
+
             var fakeBooking = new Booking
             {
                 Id = 1,
                 Room = fakeRoom,
                 Guest= fakeGuest,
          
-            };
+            };  
 
-            var bookingRepository = new Mock<IBookingRepository>();
-            bookingRepository.Setup(x => x.CreateBooking(It.IsAny<Booking>()))
+            var bookingRepoMock = new Mock<IBookingRepository>();
+            bookingRepoMock.Setup(x => x.CreateBooking(It.IsAny<Booking>()))
                 .Returns(Task.FromResult(fakeBooking));
             //bookingRepository.Setup(x => x.Save)
 
-            var handler = GetCommandMock(null, guestRepository, bookingRepository);
+            var handler = GetCommandMock(roomRepository, guestRepository, bookingRepoMock);
             var resp = await handler.Handle(command, CancellationToken.None);
 
             Assert.NotNull(resp);
