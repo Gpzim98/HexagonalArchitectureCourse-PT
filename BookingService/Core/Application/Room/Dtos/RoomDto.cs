@@ -23,5 +23,16 @@ namespace Application.Room.Dtos
                 Price = new Domain.ValueObjects.Price { Currency = dto.Currency, Value = dto.Price }
             };
         }
+
+        public static RoomDto MapToDto(Domain.Entities.Room room)
+        {
+            return new RoomDto
+            {
+                Id = room.Id,
+                Name = room.Name,
+                Level = room.Level,
+                InMaintenance = room.InMaintenance,
+            };
+        }
     }
 }

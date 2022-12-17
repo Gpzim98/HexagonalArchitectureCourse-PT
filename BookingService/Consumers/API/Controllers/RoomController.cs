@@ -2,6 +2,7 @@
 using Application.Room.Commands;
 using Application.Room.Dtos;
 using Application.Room.Ports;
+using Application.Room.Queries;
 using Application.Room.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -51,14 +52,19 @@ namespace API.Controllers
             return BadRequest(500);
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<GuestDTO>> Get(int guestId)
-        //{
-        //    var res = await _guestManager.GetGuest(guestId);
+        [HttpGet]
+        public async Task<ActionResult<RoomDto>> Get(int roomId)
+        {
+            var query = new GetRoomQuery
+            {
+                Id = roomId
+            };
 
-        //    if (res.Success) return Ok(res.Data);
+            var res = await _mediator.Send(query);
 
-        //    return NotFound(res);
-        //}
+            if (res.Success) return Ok(res.Data);
+
+            return NotFound(res);
+        }
     }
 }
